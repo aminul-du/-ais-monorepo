@@ -1,34 +1,59 @@
-# Python
-__pycache__/
-*.py[cod]
-venv/
+# Secrets
 .env
-
-# Node
-node_modules/
-.next/
-
-# OS
-.DS_Store
-
-# Secrets — belt-and-braces
 .env.*
 !.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
 
 # Rust
 target/
+**/*.rs.bk
+*.pdb
 
-# Turbo / build
-.turbo/
-dist/
-build/
-
-# Python venvs
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 .venv/
 .venv-*/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 *.egg-info/
+build/
+dist/
 
-# Local DBs / sessions
+# Node / TypeScript
+node_modules/
+.next/
+out/
+.turbo/
+.vercel/
+*.tsbuildinfo
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.iml
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# MCore
 *.sqlite
 *.sqlite3
 .mcore_jedbrain_sessions.db
+site/data/evidence/local/
+*.bundle
+.tools/bin/
