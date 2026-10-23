@@ -1,0 +1,29 @@
+services:
+  ai-orchestrator:
+    build: { context: ./apps/ai-orchestrator }
+    image: mcore-ai-orchestrator:prod
+    restart: unless-stopped
+    ports: ["8080:8080"]
+    environment:
+      MCORE_POLICY_PATH: /policy/poison-lifecycle.yaml
+    volumes:
+      - ./config/policy/poison-lifecycle.yaml:/policy/poison-lifecycle.yaml:ro
+
+  core-api:
+    build: { context: ./apps/core-api }
+    image: mcore-core-api:prod
+    restart: unless-stopped
+    ports: ["8081:8080"]
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    image: mcore-web:prod
+    restart: unless-stopped
+    ports: ["3000:3000"]
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - ai-orchestrator
+      - core-api
