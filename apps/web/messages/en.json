@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "title": "MCore",
+    "description": "Engineering Intelligence for the World. Meticulous Core Ltd."
+  },
+  "home": {
+    "title": "MCore",
+    "subtitle": "Engineering Intelligence for the World.",
+    "aiOrchestrator": "AI Orchestrator (/api)",
+    "coreApi": "Core API (/core)",
+    "loading": "loading...",
+    "ok": "ok",
+    "error": "error"
+  }
+}
