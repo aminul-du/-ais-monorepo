@@ -36,4 +36,23 @@ fi
 
 # 5. git state
 [ -z "$(git status --porcelain)" ] || printf 'warn: dirty tree\n'
+# 4b. WEB TYPECHECK + BUILD (catches class of regression that verify.sh missed on 0cc02eb)
+if [ -d apps/web ] && [ -f apps/web/tsconfig.json ]; then
+  echo "  TSC WEB TYPECHECK..."
+  if ( cd apps/web && [ -d node_modules ] || npm install --no-audit --no-fund --silent > /dev/null 2>&1; \
+       npx --no-install tsc --noEmit -p tsconfig.json > /tmp/verify-tsc.log 2>&1 ); then
+    echo "  PASS web typecheck"
+  else
+    echo "  FAIL web typecheck — see /tmp/verify-tsc.log"
+    tail -15 /tmp/verify-tsc.log
+    exit 1
+  fi
+  if ( cd apps/web && npm run build > /tmp/verify-webbuild.log 2>&1 ); then
+    echo "  PASS web build"
+  else
+    echo "  FAIL web build"
+    tail -20 /tmp/verify-webbuild.log
+    exit 1
+  fi
+fi
 printf '\n%sZERO_GAP: GREEN%s\n' "$GRN" "$RST"

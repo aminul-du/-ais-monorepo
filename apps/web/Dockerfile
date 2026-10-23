@@ -1,10 +1,20 @@
 FROM node:20-alpine AS builder
-WORKDIR /repo/apps/web
+WORKDIR /repo
 RUN apk add --no-cache libc6-compat
-COPY apps/web/package*.json ./
+
+# Copy the whole monorepo structure the build needs
+# (turbopack.root = /repo, so all packages/ must be visible)
+COPY apps/web/package*.json ./apps/web/
+COPY packages/design-system/package.json ./packages/design-system/
+COPY packages/design-system/src ./packages/design-system/src
+
+WORKDIR /repo/apps/web
 RUN npm install --no-audit --no-fund
-COPY apps/web ./
-COPY packages/design-system /repo/packages/design-system
+
+WORKDIR /repo
+COPY apps/web ./apps/web
+
+WORKDIR /repo/apps/web
 RUN npm run build
 
 FROM node:20-alpine AS runner
