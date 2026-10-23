@@ -1,0 +1,29 @@
+name: verify-stack
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+  workflow_dispatch:
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install --quiet pyyaml && python3 -c "import yaml,glob; [yaml.safe_load(open(f)) for f in glob.glob('config/policy/*.yaml')]"
+  python-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install --quiet pyyaml pytest
+      - working-directory: apps/ai-orchestrator
+        run: python3 -m pytest -v
+  rust-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: apps/core-api }
+      - working-directory: apps/core-api
+        run: cargo test --all-targets
