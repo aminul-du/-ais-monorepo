@@ -1,0 +1,57 @@
+# MCore Poison Lifecycle — RAG zone isolation + agent tool policy
+# Loaded by apps/ai-orchestrator/security/poison_guard.py
+# Owner: Aminul Islam Shamim (AIS) — Meticulous Core Ltd.
+version: 1.0.0
+
+zones:
+  Z1_trusted:
+    description: Verified internal knowledge, human-approved
+    ttl_days: null
+    allow_ingest_from: ["internal-curated", "founder-approved"]
+    require_provenance: true
+  Z2_quarantine:
+    description: Newly ingested, unverified
+    ttl_days: 30
+    allow_ingest_from: ["agent-fetch", "user-upload"]
+    require_provenance: true
+    promotion_to: Z1_trusted
+  Z3_poison:
+    description: Confirmed malicious / poisoned
+    ttl_days: null
+    allow_ingest_from: []            # manual only
+    require_provenance: false
+    retain: permanent
+
+whitelisted_tools:
+  - read_policy_scope
+  - get_osint_threats
+  - read_file
+  - run_osquery_query
+  - get_evidence_hash
+  - capture_webrtc_stats
+  - traceroute_tcp
+
+blocked_tools:
+  - drop_table
+  - truncate_table
+  - rm_rf
+  - format_disk
+  - disable_firewall
+  - modify_policy
+  - escalate_privilege
+  - write_directly_to_Z1
+  - exfiltrate_secrets
+  - execute_shell_as_root
+
+require_human_approval:
+  - deploy_to_production
+  - rotate_credentials
+  - modify_policy
+  - push_to_main
+  - modify_poison_lifecycle
+
+audit:
+  log_all_tool_calls: true
+  evidence_dir: "site/data/evidence/"
+  hash_algorithm: sha256
+  fail_closed: true            # deny on any policy parse error

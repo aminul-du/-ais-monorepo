@@ -1,0 +1,45 @@
+# MCore L0-L8 Security Layers
+# Owner: Aminul Islam Shamim (AIS) — Meticulous Core Ltd.
+# Founder ID: MCORE-FDR-AIS-001
+version: 1.0.0
+
+layers:
+  L0_policy:
+    description: Policy-as-code source of truth
+    artifacts: ["config/policy/*.yaml"]
+    enforcement: human_review_required
+  L1_identity:
+    description: Cloud Run IAM / service accounts
+    artifacts: ["GCP IAM"]
+    enforcement: platform
+  L2_network:
+    description: Egress filtering
+    artifacts: ["config/nftables/mcore-egress.nft"]
+    enforcement: host_kernel
+  L3_os_scan:
+    description: Continuous OS-level scanning
+    artifacts: ["config/systemd/mcore-scan.timer"]
+    enforcement: host_systemd
+  L4_detection:
+    description: Runtime threat detection
+    artifacts:
+      - "apps/web/src/hooks/useDiagnostics.ts"
+      - "apps/core-api/src/traceroute.rs"
+      - "apps/ebpf-agent/src/main.c"
+    enforcement: application
+  L5_response:
+    description: Agent behavior enforcement
+    artifacts: ["apps/ai-orchestrator/security/poison_guard.py"]
+    enforcement: application
+  L6_evidence:
+    description: WORM evidence ledger
+    artifacts: ["site/data/evidence/"]
+    enforcement: append_only_store
+  L7_ci_cd:
+    description: Pipeline gates
+    artifacts: [".github/workflows/verify-stack.yml"]
+    enforcement: ci
+  L8_research:
+    description: Threat research
+    artifacts: ["research/"]
+    enforcement: human_review
