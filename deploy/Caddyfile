@@ -1,0 +1,26 @@
+{
+    # Uncomment when you have a real domain pointing to this box:
+    # email me@aminul-du.com
+}
+
+# ── Production (needs DNS: mcore.example.com → this box, ports 80/443 open) ──
+# mcore.aminul-du.com {
+#     reverse_proxy web:3000
+#     reverse_proxy /api/* ai-orchestrator:8080
+#     reverse_proxy /core/* core-api:8080
+#     encode zstd gzip br
+#     header {
+#         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+#         X-Content-Type-Options "nosniff"
+#         -Server
+#     }
+# }
+
+# ── Local (self-signed, HTTP/3 works, browser warns once) ──
+:443 {
+    tls internal
+    reverse_proxy /api/* ai-orchestrator:8080
+    reverse_proxy /core/* core-api:8080
+    reverse_proxy /* web:3000
+    encode zstd gzip
+}
