@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { colors, radius, font } from '@mcore/design-system';
 
 type Status = 'loading' | 'ok' | 'error';
 type State = { status: Status; data?: Record<string, unknown>; error?: string };
@@ -12,9 +13,9 @@ export default function Home() {
     fetch('/core/healthz').then(r => r.json()).then(data => setCore({ status: 'ok', data })).catch(e => setCore({ status: 'error', error: String(e) }));
   }, []);
   return (
-    <main style={{ padding: 40, fontFamily: 'system-ui', background: '#0A0B10', color: '#fff', minHeight: '100vh' }}>
-      <h1 style={{ color: '#D0BCFF', margin: 0 }}>MCore</h1>
-      <p style={{ color: '#A0A3B1', marginTop: 4 }}>Engineering Intelligence for the World.</p>
+    <main style={{ padding: 40, fontFamily: font.sans, background: colors.bg, color: colors.textPrimary, minHeight: '100vh' }}>
+      <h1 style={{ color: colors.accent, margin: 0 }}>MCore</h1>
+      <p style={{ color: colors.textSecondary, marginTop: 4 }}>Engineering Intelligence for the World.</p>
       <div style={{ marginTop: 40, display: 'grid', gap: 16, maxWidth: 640 }}>
         <Panel title="AI Orchestrator (/api)" state={ai} />
         <Panel title="Core API (/core)" state={core} />
@@ -22,17 +23,16 @@ export default function Home() {
     </main>
   );
 }
-
 function Panel({ title, state }: { title: string; state: State }) {
-  const color = state.status === 'ok' ? '#3DDC97' : state.status === 'error' ? '#FF5C5C' : '#FFB020';
+  const color = state.status === 'ok' ? colors.statusOk : state.status === 'error' ? colors.statusError : colors.statusWarn;
   const body = state.status === 'loading' ? 'loading...' : state.status === 'error' ? state.error : JSON.stringify(state.data, null, 2);
   return (
-    <div style={{ background: '#1A1C23', borderRadius: 12, padding: 20 }}>
+    <div style={{ background: colors.surface, borderRadius: radius.md, padding: 20 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-        <span style={{ color: '#A0A3B1', fontSize: 12 }}>{title}</span>
+        <span style={{ color: colors.textSecondary, fontSize: 12 }}>{title}</span>
         <span style={{ fontSize: 12, color }}>{state.status}</span>
       </div>
-      <pre style={{ margin: 0, fontFamily: 'monospace', fontSize: 13, whiteSpace: 'pre-wrap' }}>{body}</pre>
+      <pre style={{ margin: 0, fontFamily: font.mono, fontSize: 13, whiteSpace: 'pre-wrap' }}>{body}</pre>
     </div>
   );
 }

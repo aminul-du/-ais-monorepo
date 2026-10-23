@@ -20,6 +20,8 @@
 | `docker-compose.prod.yml` + `deploy.sh` | `compose up` OK |
 | `verify.sh` + pre-push hook + CI | 22 tests pass each push |
 | Live dashboard (`page.tsx`) | SSR + backends verified (this commit) |
+| `@mcore/design-system` scaffold | tsc pass, 9 colors |
+| `@mcore/design-system` wired into web | tokens used, SSR clean (this commit) |
 
 ## 🔄 In Progress
 
@@ -45,4 +47,4 @@
 - `config/nftables/`, `config/systemd/`
 - `.github/CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`
 
-**Next task:** `packages/design-system/` scaffold
+**Next task:** Cloud Run deploy workflow (`.github/workflows/deploy-cloudrun.yml`)
