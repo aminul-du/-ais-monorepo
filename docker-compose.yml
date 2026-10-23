@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: shorbornoai
+      POSTGRES_PASSWORD: "@AIS-DU"
+      POSTGRES_DB: shorborno
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api-core:
+    build:
+      context: ./apps/api-core
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgresql://shorbornoai:%40AIS-DU@db:5432/shorborno
+      AI_ENGINE_URL: http://ai-engine:8000
+    depends_on:
+      - db
+      - ai-engine
+
+  ai-engine:
+    build:
+      context: ./apps/ai-engine
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:

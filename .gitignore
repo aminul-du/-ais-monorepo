@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Node
+node_modules/
+.next/
+
+# OS
+.DS_Store
+
+# Secrets — belt-and-braces
+.env.*
+!.env.example
+
+# Rust
+target/
+
+# Turbo / build
+.turbo/
+dist/
+build/
+
+# Python venvs
+.venv/
+.venv-*/
+*.egg-info/
+
+# Local DBs / sessions
+*.sqlite
+*.sqlite3
+.mcore_jedbrain_sessions.db

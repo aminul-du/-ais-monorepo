@@ -1,0 +1,19 @@
+{
+  "name": "shorbornoai-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCore — Engineering Intelligence for the World. Shorborno AI monorepo.",
+  "author": "Meticulous Core Ltd.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
