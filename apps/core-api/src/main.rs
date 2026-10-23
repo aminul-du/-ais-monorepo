@@ -7,6 +7,8 @@ use axum::{routing::get, Json, Router};
 use serde_json::{json, Value};
 use std::net::SocketAddr;
 
+mod traceroute;
+
 async fn health() -> Json<Value> {
     Json(json!({
         "status": "ok",
@@ -16,7 +18,9 @@ async fn health() -> Json<Value> {
 }
 
 fn app() -> Router {
-    Router::new().route("/healthz", get(health))
+    Router::new()
+        .route("/healthz", get(health))
+        .merge(traceroute::router())
 }
 
 #[tokio::main]
